@@ -3,14 +3,15 @@
 import argparse, os
 import sys
 import inspect
+import subprocess
 
-if 'PEBBLE_SDK_PATH' not in os.environ:
-    print 'Please set pebble sdk path environment variable firstly!'
-    print 'export PEBBLE_SDK_PATH=/path/to/PebbleSDK/'
-    sys.exit()
+myProc = subprocess.Popen(["pebble sdk include-path basalt"], stdout=subprocess.PIPE, shell=True)
+output, err = myProc.communicate()
+status = myProc.wait()
+location = output.replace('\n', '') + '/../../common/tools'
+print location
+sys.path.append(location)
 
-sys.path.append(os.path.join(os.environ['PEBBLE_SDK_PATH'], 
-                'Pebble/common/tools'))
 import pbpack
 from pbpack import ResourcePack
 
